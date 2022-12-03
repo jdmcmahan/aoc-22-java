@@ -11,6 +11,7 @@
 
     <modules>
         <module>aoc-01-caloriecounting</module>
+        <module>aoc-02-rockpaperscissors</module>
     </modules>
 
     <properties>
