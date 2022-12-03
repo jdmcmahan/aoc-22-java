@@ -19,7 +19,6 @@ public class RoundListParser {
             "C", Shape.SCISSORS
     );
 
-
     protected static final Map<String, Shape> SELF_SHAPE_KEYS = Map.of(
             "X", Shape.ROCK,
             "Y", Shape.PAPER,
