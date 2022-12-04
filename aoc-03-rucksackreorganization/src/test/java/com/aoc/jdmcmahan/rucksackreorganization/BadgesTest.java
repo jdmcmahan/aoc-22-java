@@ -16,7 +16,7 @@ class BadgesTest {
 
     @Test
     void testBadges_withExampleInput() throws IOException {
-        try (InputStream input = MisplacedItemsTest.class.getClassLoader().getResourceAsStream("example.txt")) {
+        try (InputStream input = BadgesTest.class.getClassLoader().getResourceAsStream("example.txt")) {
             RucksackListParser parser = new RucksackListParser();
 
             List<Rucksack> rucksacks = parser.parse(input)
@@ -36,7 +36,7 @@ class BadgesTest {
 
     @Test
     void testBadges_withChallengeInput() throws IOException {
-        try (InputStream input = MisplacedItemsTest.class.getClassLoader().getResourceAsStream("challenge.txt")) {
+        try (InputStream input = BadgesTest.class.getClassLoader().getResourceAsStream("challenge.txt")) {
             RucksackListParser parser = new RucksackListParser();
 
             List<Rucksack> rucksacks = parser.parse(input)
