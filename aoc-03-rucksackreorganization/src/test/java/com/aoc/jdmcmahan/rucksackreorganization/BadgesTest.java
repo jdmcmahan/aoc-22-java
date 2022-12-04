@@ -2,6 +2,7 @@ package com.aoc.jdmcmahan.rucksackreorganization;
 
 import com.aoc.jdmcmahan.rucksackreorganization.model.ItemType;
 import com.aoc.jdmcmahan.rucksackreorganization.model.Rucksack;
+import com.aoc.jdmcmahan.rucksackreorganization.model.RucksackSet;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -24,7 +25,8 @@ class BadgesTest {
             assertEquals(6, rucksacks.size());
 
             int sum = IntStream.iterate(0, i -> i < rucksacks.size(), i -> i + 3)
-                    .mapToObj(i -> RucksackUtils.findCommonBadge(rucksacks.get(i), rucksacks.get(i + 1), rucksacks.get(i + 2)))
+                    .mapToObj(i -> new RucksackSet(rucksacks.get(i), rucksacks.get(i + 1), rucksacks.get(i + 2)))
+                    .map(RucksackSet::findCommonBadge)
                     .mapToInt(ItemType::priority)
                     .sum();
 
@@ -41,7 +43,8 @@ class BadgesTest {
                     .toList();
 
             int sum = IntStream.iterate(0, i -> i < rucksacks.size(), i -> i + 3)
-                    .mapToObj(i -> RucksackUtils.findCommonBadge(rucksacks.get(i), rucksacks.get(i + 1), rucksacks.get(i + 2)))
+                    .mapToObj(i -> new RucksackSet(rucksacks.get(i), rucksacks.get(i + 1), rucksacks.get(i + 2)))
+                    .map(RucksackSet::findCommonBadge)
                     .mapToInt(ItemType::priority)
                     .sum();
 

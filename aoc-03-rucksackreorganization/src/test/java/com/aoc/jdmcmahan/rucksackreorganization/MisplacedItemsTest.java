@@ -24,26 +24,26 @@ class MisplacedItemsTest {
 
             assertEquals(6, rucksacks.size());
 
-            assertThat(RucksackUtils.findMisplacedItemTypes(rucksacks.get(0)))
+            assertThat(rucksacks.get(0).findMisplacedItemTypes())
                     .containsExactly(ItemType.valueOf('p'));
 
-            assertThat(RucksackUtils.findMisplacedItemTypes(rucksacks.get(1)))
+            assertThat(rucksacks.get(1).findMisplacedItemTypes())
                     .containsExactly(ItemType.valueOf('L'));
 
-            assertThat(RucksackUtils.findMisplacedItemTypes(rucksacks.get(2)))
+            assertThat(rucksacks.get(2).findMisplacedItemTypes())
                     .containsExactly(ItemType.valueOf('P'));
 
-            assertThat(RucksackUtils.findMisplacedItemTypes(rucksacks.get(3)))
+            assertThat(rucksacks.get(3).findMisplacedItemTypes())
                     .containsExactly(ItemType.valueOf('v'));
 
-            assertThat(RucksackUtils.findMisplacedItemTypes(rucksacks.get(4)))
+            assertThat(rucksacks.get(4).findMisplacedItemTypes())
                     .containsExactly(ItemType.valueOf('t'));
 
-            assertThat(RucksackUtils.findMisplacedItemTypes(rucksacks.get(5)))
+            assertThat(rucksacks.get(5).findMisplacedItemTypes())
                     .containsExactly(ItemType.valueOf('s'));
 
             int sum = rucksacks.stream()
-                    .map(RucksackUtils::findMisplacedItemTypes)
+                    .map(Rucksack::findMisplacedItemTypes)
                     .flatMap(Collection::stream)
                     .mapToInt(ItemType::priority)
                     .sum();
@@ -58,7 +58,7 @@ class MisplacedItemsTest {
             RucksackListParser parser = new RucksackListParser();
 
             int sum = parser.parse(input)
-                    .map(RucksackUtils::findMisplacedItemTypes)
+                    .map(Rucksack::findMisplacedItemTypes)
                     .flatMap(Collection::stream)
                     .mapToInt(ItemType::priority)
                     .sum();
