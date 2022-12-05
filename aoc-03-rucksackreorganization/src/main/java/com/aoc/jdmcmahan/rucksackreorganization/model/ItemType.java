@@ -1,13 +1,16 @@
 package com.aoc.jdmcmahan.rucksackreorganization.model;
 
+import lombok.EqualsAndHashCode;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
+@EqualsAndHashCode
 public final class ItemType {
 
     private static final Map<Character, ItemType> INTERN = new HashMap<>();
 
+    @EqualsAndHashCode.Include
     private final char tag;
 
     private ItemType(char tag) {
@@ -24,19 +27,6 @@ public final class ItemType {
 
     public int priority() {
         return priority(this.tag);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ItemType itemType = (ItemType) o;
-        return tag == itemType.tag;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(tag);
     }
 
     public static ItemType valueOf(char tag) {
