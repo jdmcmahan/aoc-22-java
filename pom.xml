@@ -14,6 +14,7 @@
         <module>aoc-02-rockpaperscissors</module>
         <module>aoc-03-rucksackreorganization</module>
         <module>aoc-04-campcleanup</module>
+        <module>aoc-05-supplystacks</module>
     </modules>
 
     <properties>
