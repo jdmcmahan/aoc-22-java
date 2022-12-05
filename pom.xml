@@ -13,6 +13,7 @@
         <module>aoc-01-caloriecounting</module>
         <module>aoc-02-rockpaperscissors</module>
         <module>aoc-03-rucksackreorganization</module>
+        <module>aoc-04-campcleanup</module>
     </modules>
 
     <properties>
