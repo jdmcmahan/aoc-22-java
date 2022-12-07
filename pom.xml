@@ -15,6 +15,7 @@
         <module>aoc-03-rucksackreorganization</module>
         <module>aoc-04-campcleanup</module>
         <module>aoc-05-supplystacks</module>
+        <module>aoc-06-tuningtrouble</module>
     </modules>
 
     <properties>
