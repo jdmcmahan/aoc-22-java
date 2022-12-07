@@ -23,7 +23,7 @@ public class FilesystemCommandParser {
             try {
                 Filesystem filesystem = new Filesystem(new Directory("/"));
 
-                Directory currentDirectory = filesystem.getRoot();
+                Directory currentDirectory = filesystem.root();
                 String line;
 
                 while ((line = reader.readLine()) != null) {
@@ -32,7 +32,7 @@ public class FilesystemCommandParser {
                         String argument = matcher.group(1);
 
                         currentDirectory = switch (argument) {
-                            case "/" -> filesystem.getRoot();
+                            case "/" -> filesystem.root();
                             case ".." -> currentDirectory.getParent();
                             default -> currentDirectory.getSubdirectory(argument)
                                     .orElseThrow(() -> new IllegalArgumentException(argument + ": No such directory"));

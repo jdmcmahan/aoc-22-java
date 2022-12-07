@@ -24,7 +24,7 @@ public class SizeCalculationTest {
             FilesystemCommandParser parser = new FilesystemCommandParser();
             Filesystem filesystem = parser.parse(input);
 
-            assertEquals(95437, calculateTotalSize(Collections.singleton(filesystem.getRoot()), (directory -> directory.getSize() <= 100000)));
+            assertEquals(95437, calculateTotalSize(Collections.singleton(filesystem.root()), (directory -> directory.getSize() <= 100000)));
         }
     }
 
@@ -34,7 +34,7 @@ public class SizeCalculationTest {
             FilesystemCommandParser parser = new FilesystemCommandParser();
             Filesystem filesystem = parser.parse(input);
 
-            assertEquals(1141028, calculateTotalSize(Collections.singleton(filesystem.getRoot()), (directory -> directory.getSize() <= 100000)));
+            assertEquals(1141028, calculateTotalSize(Collections.singleton(filesystem.root()), (directory -> directory.getSize() <= 100000)));
         }
     }
 
@@ -44,8 +44,8 @@ public class SizeCalculationTest {
             FilesystemCommandParser parser = new FilesystemCommandParser();
             Filesystem filesystem = parser.parse(input);
 
-            long spaceNeeded = 30000000 - (70000000 - filesystem.getRoot().getSize());
-            Directory candidate = findOptimalDeletionCandidate(filesystem.getRoot(), spaceNeeded)
+            long spaceNeeded = 30000000 - (70000000 - filesystem.root().getSize());
+            Directory candidate = findOptimalDeletionCandidate(filesystem.root(), spaceNeeded)
                     .orElseGet(Assertions::fail);
 
             assertEquals(24933642L, candidate.getSize());
@@ -58,8 +58,8 @@ public class SizeCalculationTest {
             FilesystemCommandParser parser = new FilesystemCommandParser();
             Filesystem filesystem = parser.parse(input);
 
-            long spaceNeeded = 30000000 - (70000000 - filesystem.getRoot().getSize());
-            Directory candidate = findOptimalDeletionCandidate(filesystem.getRoot(), spaceNeeded)
+            long spaceNeeded = 30000000 - (70000000 - filesystem.root().getSize());
+            Directory candidate = findOptimalDeletionCandidate(filesystem.root(), spaceNeeded)
                     .orElseGet(Assertions::fail);
 
             assertEquals(8278005L, candidate.getSize());
