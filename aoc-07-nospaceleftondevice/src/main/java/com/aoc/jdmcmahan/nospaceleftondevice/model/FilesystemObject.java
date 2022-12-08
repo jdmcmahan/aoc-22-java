@@ -4,6 +4,8 @@ public interface FilesystemObject {
 
     Directory getParent();
 
+    String getPath();
+
     String getName();
 
     long getSize();

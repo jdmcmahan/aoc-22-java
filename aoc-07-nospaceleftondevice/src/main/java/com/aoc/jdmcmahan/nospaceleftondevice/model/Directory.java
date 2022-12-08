@@ -1,26 +1,19 @@
 package com.aoc.jdmcmahan.nospaceleftondevice.model;
 
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import java.util.*;
-import java.util.stream.Stream;
 
-@RequiredArgsConstructor
 @Getter
-public class Directory implements FilesystemObject {
+public class Directory extends AbstractFilesystemObject {
 
-    private final String name;
     private final Map<String, Directory> subdirectories = new HashMap<>();
     private final Map<String, File> files = new HashMap<>();
 
-    private Directory parent;
+    private long size = 0;
 
-    @Override
-    public long getSize() {
-        return Stream.concat(subdirectories.values().stream(), files.values().stream())
-                .mapToLong(FilesystemObject::getSize)
-                .sum();
+    public Directory(String name) {
+        super(name);
     }
 
     public Collection<Directory> getSubdirectories() {
@@ -42,7 +35,7 @@ public class Directory implements FilesystemObject {
     public void setParent(Directory parent) {
         if (this.parent != parent) {
             if (this.parent != null) {
-                this.parent.removeDirectory(this);
+                this.parent.removeDirectory(this.name);
             }
 
             this.parent = parent;
@@ -51,6 +44,8 @@ public class Directory implements FilesystemObject {
                 parent.addDirectory(this);
             }
         }
+
+        this.invalidatePath();
     }
 
     public void addDirectory(Directory directory) {
@@ -65,16 +60,19 @@ public class Directory implements FilesystemObject {
 
         subdirectories.put(directory.getName(), directory);
         directory.setParent(this);
+
+        this.descendantObjectAdded(directory);
     }
 
-    public void removeDirectory(Directory directory) {
-        Directory existing = subdirectories.get(directory.getName());
-        if (existing != directory) {
+    public void removeDirectory(String name) {
+        Directory directory = subdirectories.remove(name);
+        if (directory == null) {
             return;
         }
 
-        subdirectories.remove(directory.getName());
         directory.setParent(null);
+
+        this.descendantObjectRemoved(directory);
     }
 
     public void addFile(File file) {
@@ -89,15 +87,42 @@ public class Directory implements FilesystemObject {
 
         files.put(file.getName(), file);
         file.setParent(this);
+
+        this.descendantObjectAdded(file);
     }
 
-    public void removeFile(File file) {
-        File existing = files.get(file.getName());
-        if (existing != file) {
+    public void removeFile(String name) {
+        File file = files.remove(name);
+        if (file == null) {
             return;
         }
 
-        files.remove(file.getName());
         file.setParent(null);
+
+        this.descendantObjectRemoved(file);
+    }
+
+    protected void descendantObjectAdded(FilesystemObject object) {
+        this.size += object.getSize();
+
+        if (parent != null) {
+            parent.descendantObjectAdded(object);
+        }
+    }
+
+    protected void descendantObjectRemoved(FilesystemObject object) {
+        this.size -= object.getSize();
+
+        if (parent != null) {
+            parent.descendantObjectRemoved(object);
+        }
+    }
+
+    @Override
+    protected void invalidatePath() {
+        super.invalidatePath();
+
+        this.getFiles().forEach(File::invalidatePath);
+        this.getSubdirectories().forEach(Directory::invalidatePath);
     }
 }
