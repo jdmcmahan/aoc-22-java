@@ -24,11 +24,30 @@ public class FilesystemCommandParser {
                 Filesystem filesystem = new Filesystem(new Directory("/"));
 
                 Directory currentDirectory = filesystem.root();
-                String line;
+                boolean parsingLs = false;
 
+                String line;
                 while ((line = reader.readLine()) != null) {
                     Matcher matcher;
-                    if ((matcher = CD_COMMAND_PATTERN.matcher(line)).find()) {
+
+                    if (parsingLs) {
+                        if ((matcher = LS_DIR_OUTPUT_PATTERN.matcher(line)).find()) {
+                            String name = matcher.group(1);
+
+                            currentDirectory.addDirectory(new Directory(name));
+                            continue;
+                        } else if ((matcher = LS_FILE_OUTPUT_PATTERN.matcher(line)).find()) {
+                            long size = Long.parseLong(matcher.group(1));
+                            String name = matcher.group(2);
+
+                            currentDirectory.addFile(new File(name, size));
+                            continue;
+                        }
+                    }
+
+                    if (LS_COMMAND_PATTERN.matcher(line).find()) {
+                        parsingLs = true;
+                    } else if ((matcher = CD_COMMAND_PATTERN.matcher(line)).find()) {
                         String argument = matcher.group(1);
 
                         currentDirectory = switch (argument) {
@@ -37,8 +56,6 @@ public class FilesystemCommandParser {
                             default -> currentDirectory.getSubdirectory(argument)
                                     .orElseThrow(() -> new IllegalArgumentException(argument + ": No such directory"));
                         };
-                    } else if (LS_COMMAND_PATTERN.matcher(line).find()) {
-                        this.parseLsOutput(currentDirectory, reader);
                     } else {
                         throw new IllegalArgumentException("Unrecognized command: " + line);
                     }
@@ -49,30 +66,5 @@ public class FilesystemCommandParser {
                 throw new IllegalArgumentException("Error at line " + reader.getLineNumber() + ": " + e.getMessage(), e);
             }
         }
-    }
-
-    protected void parseLsOutput(Directory currentDirectory, LineNumberReader reader) throws IOException {
-        reader.mark(1000);
-
-        String line;
-        while ((line = reader.readLine()) != null) {
-            Matcher matcher;
-            if ((matcher = LS_DIR_OUTPUT_PATTERN.matcher(line)).find()) {
-                String name = matcher.group(1);
-
-                currentDirectory.addDirectory(new Directory(name));
-            } else if ((matcher = LS_FILE_OUTPUT_PATTERN.matcher(line)).find()) {
-                long size = Long.parseLong(matcher.group(1));
-                String name = matcher.group(2);
-
-                currentDirectory.addFile(new File(name, size));
-            } else {
-                break;
-            }
-
-            reader.mark(1000);
-        }
-
-        reader.reset();
     }
 }
