@@ -43,6 +43,8 @@ public class FilesystemCommandParser {
                             currentDirectory.addFile(new File(name, size));
                             continue;
                         }
+
+                        parsingLs = false;
                     }
 
                     if (LS_COMMAND_PATTERN.matcher(line).find()) {
