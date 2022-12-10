@@ -17,6 +17,7 @@
         <module>aoc-05-supplystacks</module>
         <module>aoc-06-tuningtrouble</module>
         <module>aoc-07-nospaceleftondevice</module>
+        <module>aoc-08-treetoptreehouse</module>
     </modules>
 
     <properties>
