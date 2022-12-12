@@ -18,6 +18,7 @@
         <module>aoc-06-tuningtrouble</module>
         <module>aoc-07-nospaceleftondevice</module>
         <module>aoc-08-treetoptreehouse</module>
+        <module>aoc-09-ropebridge</module>
     </modules>
 
     <properties>
