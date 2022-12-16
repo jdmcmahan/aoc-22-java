@@ -19,6 +19,8 @@
         <module>aoc-07-nospaceleftondevice</module>
         <module>aoc-08-treetoptreehouse</module>
         <module>aoc-09-ropebridge</module>
+        <module>aoc-10-cathoderaytube</module>
+        <module>aoc-11-monkeyinthemiddle</module>
     </modules>
 
     <properties>
