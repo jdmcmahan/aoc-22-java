@@ -21,6 +21,7 @@
         <module>aoc-09-ropebridge</module>
         <module>aoc-10-cathoderaytube</module>
         <module>aoc-11-monkeyinthemiddle</module>
+        <module>aoc-13-distresssignal</module>
     </modules>
 
     <properties>
