@@ -23,6 +23,7 @@
         <module>aoc-11-monkeyinthemiddle</module>
         <module>aoc-12-hillclimbingalgorithm</module>
         <module>aoc-13-distresssignal</module>
+        <module>aoc-18-boilingboulders</module>
     </modules>
 
     <properties>
