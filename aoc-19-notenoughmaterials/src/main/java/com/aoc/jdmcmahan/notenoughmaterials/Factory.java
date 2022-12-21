@@ -1,58 +1,57 @@
 package com.aoc.jdmcmahan.notenoughmaterials;
 
+import com.aoc.jdmcmahan.notenoughmaterials.blueprint.model.RobotBlueprint;
 import com.aoc.jdmcmahan.notenoughmaterials.model.BlueprintSet;
+import com.aoc.jdmcmahan.notenoughmaterials.model.Resource;
 import com.aoc.jdmcmahan.notenoughmaterials.model.ResourceStockpile;
 import com.aoc.jdmcmahan.notenoughmaterials.robot.model.OreRobot;
 import com.aoc.jdmcmahan.notenoughmaterials.robot.model.Robot;
+import com.aoc.jdmcmahan.notenoughmaterials.robot.model.RobotOutput;
+import lombok.Getter;
 
 import java.util.*;
 
 public class Factory {
 
+    @Getter
     private final BlueprintSet blueprints;
+
+    @Getter
     private final ResourceStockpile resources;
 
     private final List<Robot> robots = new LinkedList<>();
-    private final List<Robot> pending = new LinkedList<>();
+    private final Robot pending;
 
     public Factory(BlueprintSet blueprints) {
         this.blueprints = blueprints;
         this.resources = new ResourceStockpile();
 
         this.robots.add(new OreRobot());
+        this.pending = null;
     }
 
-    protected Factory(Factory other) {
+    protected Factory(Factory other, RobotBlueprint<?> toBuild) {
         this.blueprints = other.blueprints;
         this.resources = new ResourceStockpile(other.resources);
 
         this.robots.addAll(other.robots);
-        this.pending.addAll(other.pending);
+        this.pending = toBuild.build(this.resources);
     }
 
-    public Factory maximize(Comparator<Factory> comparator, int remaining) {
-        if (remaining < 0) {
-            //return Collections.singletonList(this);
+    public Factory minmax(Comparator<Factory> comparator, int remaining) {
+        if (remaining <= 0) {
+            return this;
         }
 
-        /*List<Robot> toBuild = blueprints.stream()
-                .filter(blueprint -> blueprint.canAfford(resources))
-                .map()
-                .collect(Collectors.toList());*/
-
         robots.stream()
-                .map(Robot::produce)
+                .map(Robot::output)
                 .forEach(resources::credit);
 
-        robots.addAll(pending);
-        pending.clear();
+        robots.add(pending);
 
-        //pending.addAll(toBuild);
-
-        Factory next = new Factory(this);
-        return comparator.compare(this, next) > 0
-                ? next.maximize(comparator, remaining - 1)
-                : this;
+        return this.futures(remaining).stream()
+                .map(future -> future.minmax(comparator, remaining - 1))
+                .reduce(this, (a, b) -> comparator.compare(a, b) < 0 ? a : b);
     }
 
     public Collection<Factory> futures(int remaining) {
@@ -60,25 +59,28 @@ public class Factory {
             return Collections.emptyList();
         }
 
-        return null;
+        List<Factory> futures = new LinkedList<>();
+
+        for (Resource resource : Resource.values()) {
+            if (resources.getStock(resource) + this.currentProduction(resource) < maxSpending(resource)) {
+                futures.add(new Factory(this, blueprints.getBlueprint(resource)));
+            }
+        }
+
+        return futures;
     }
 
-    /*public void tick() {
-        if (remaining == 0) {
-            return;
-        }
+    protected int currentProduction(Resource resource) {
+        return robots.stream()
+                .map(Robot::output)
+                .filter(output -> output.resource() == resource)
+                .mapToInt(RobotOutput::quantity)
+                .sum();
+    }
 
-        this.remaining--;
-
-        for (RobotBlueprint<?> blueprint : blueprints) {
-            if (blueprint.canAfford(resources) && )
-        }
-
-        robots.stream()
-                .map(Robot::produce)
-                .forEach(resources::credit);
-
-        robots.addAll(pending);
-        pending.clear();
-    }*/
+    protected int maxSpending(Resource resource) {
+        return blueprints.stream()
+                .mapToInt(blueprint -> blueprint.cost(resource))
+                .sum();
+    }
 }

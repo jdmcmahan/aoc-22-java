@@ -1,5 +1,6 @@
 package com.aoc.jdmcmahan.notenoughmaterials.model;
 
+import com.aoc.jdmcmahan.notenoughmaterials.robot.model.RobotOutput;
 import lombok.NoArgsConstructor;
 
 import java.util.EnumMap;
@@ -18,10 +19,6 @@ public class ResourceStockpile {
         return resources.getOrDefault(resource, 0);
     }
 
-    public void debit(ResourceLot lot) {
-        this.debit(lot.resource(), lot.quantity());
-    }
-
     public synchronized void debit(Resource resource, int quantity) {
         if (this.getStock(resource) < quantity) {
             throw new IllegalArgumentException("Not enough stock of resource " + resource + ". Current stock: " + resources.get(resource) + ", needed: " + quantity);
@@ -30,7 +27,7 @@ public class ResourceStockpile {
         this.credit(resource, -1 * quantity);
     }
 
-    public void credit(ResourceLot lot) {
+    public void credit(RobotOutput lot) {
         this.credit(lot.resource(), lot.quantity());
     }
 
