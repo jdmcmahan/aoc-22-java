@@ -24,6 +24,7 @@
         <module>aoc-12-hillclimbingalgorithm</module>
         <module>aoc-13-distresssignal</module>
         <module>aoc-18-boilingboulders</module>
+        <module>aoc-19-notenoughmaterials</module>
         <module>aoc-20-grovepositioningsystem</module>
     </modules>
 
