@@ -25,6 +25,7 @@
         <module>aoc-13-distresssignal</module>
         <module>aoc-18-boilingboulders</module>
         <module>aoc-20-grovepositioningsystem</module>
+        <module>aoc-21-monkeymath</module>
     </modules>
 
     <properties>
