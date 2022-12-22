@@ -2,11 +2,13 @@ package com.aoc.jdmcmahan.notenoughmaterials.model;
 
 import com.aoc.jdmcmahan.notenoughmaterials.robot.model.RobotOutput;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.EnumMap;
 import java.util.Map;
 
 @NoArgsConstructor
+@ToString
 public class ResourceStockpile {
 
     private final Map<Resource, Integer> resources = new EnumMap<>(Resource.class);

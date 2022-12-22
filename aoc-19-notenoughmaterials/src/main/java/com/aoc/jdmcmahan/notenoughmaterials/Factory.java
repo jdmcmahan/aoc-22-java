@@ -35,36 +35,44 @@ public class Factory {
         this.resources = new ResourceStockpile(other.resources);
 
         this.robots.addAll(other.robots);
-        this.pending = toBuild.build(this.resources);
+
+        this.pending = toBuild != null
+                ? toBuild.build(this.resources)
+                : null;
     }
 
     public Factory minmax(Comparator<Factory> comparator, int remaining) {
-        if (remaining <= 0) {
-            return this;
-        }
-
         robots.stream()
                 .map(Robot::output)
                 .forEach(resources::credit);
 
-        robots.add(pending);
+        if (pending != null) {
+            robots.add(pending);
+        }
 
-        return this.futures(remaining).stream()
+        if (remaining == 0) {
+            return this;
+        }
+
+        return this.futures().stream()
                 .map(future -> future.minmax(comparator, remaining - 1))
                 .reduce(this, (a, b) -> comparator.compare(a, b) < 0 ? a : b);
     }
 
-    public Collection<Factory> futures(int remaining) {
-        if (remaining == 0) {
-            return Collections.emptyList();
-        }
-
+    public Collection<Factory> futures() {
         List<Factory> futures = new LinkedList<>();
 
         for (Resource resource : Resource.values()) {
-            if (resources.getStock(resource) + this.currentProduction(resource) < maxSpending(resource)) {
-                futures.add(new Factory(this, blueprints.getBlueprint(resource)));
+            if (resource == Resource.GEODE || resources.getStock(resource) + this.currentProduction(resource) <= maxSpending(resource)) {
+                RobotBlueprint<?> blueprint = blueprints.getBlueprint(resource);
+                if (blueprint.canAfford(resources)) {
+                    futures.add(new Factory(this, blueprint));
+                }
             }
+        }
+
+        if (futures.isEmpty()) {
+            futures.add(new Factory(this, null));
         }
 
         return futures;
