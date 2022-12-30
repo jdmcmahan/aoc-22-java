@@ -27,6 +27,7 @@
         <module>aoc-19-notenoughmaterials</module>
         <module>aoc-20-grovepositioningsystem</module>
         <module>aoc-21-monkeymath</module>
+        <module>aoc-25-fullofhotair</module>
     </modules>
 
     <properties>
