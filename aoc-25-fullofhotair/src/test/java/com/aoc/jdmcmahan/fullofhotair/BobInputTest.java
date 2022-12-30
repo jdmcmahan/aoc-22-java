@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BobInputTest {
+class BobInputTest {
 
     @Test
     void testConsole_withExampleInput() throws IOException {
