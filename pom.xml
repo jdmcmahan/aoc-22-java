@@ -29,6 +29,7 @@
         <module>aoc-20-grovepositioningsystem</module>
         <module>aoc-21-monkeymath</module>
         <module>aoc-25-fullofhotair</module>
+        <module>aoc-15-beaconexclusionzone</module>
     </modules>
 
     <properties>
